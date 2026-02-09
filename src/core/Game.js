@@ -278,6 +278,17 @@ export class Game {
 	}
 
 	showSOSInterface() {
+		const lastSOS = localStorage.getItem('last_sos_time');
+		const now = Date.now();
+		const cooldown = 30 * 60 * 1000; // 30 minutes
+
+		if (lastSOS && (now - lastSOS < cooldown)) {
+			const remaining = Math.ceil((cooldown - (now - lastSOS)) / 60000);
+			this.terminal.print(`PRODUTIVIDADE BLOQUEADA: Link de SOS em cooldown. Aguarde ${remaining} minutos ou tente hackear localmente.`, "glitch");
+			this.terminal.showInput();
+			return;
+		}
+
 		this.terminal.hideInput();
 		this.terminal.printHTML(`
             <br>
@@ -287,6 +298,7 @@ export class Game {
         `);
 
 		document.getElementById('sos-btn').onclick = () => {
+			localStorage.setItem('last_sos_time', Date.now());
 			window.open(`https://wa.me/?text=SOS%20Estou%20preso%20no%20KERNEL%20PANIC%20(Setor%20${this.player.x},${this.player.y}).%20A%20IA%20vai%20me%20matar.%20Responda%20rapido:%20Qual%20e%20o%20nome%20do%20animal%20que%20guarda%20o%20inferno%20(3%20cabecas)?`, '_blank');
 			this.enableInputAfterSOS();
 		};
