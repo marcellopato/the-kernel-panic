@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+    background-color: #000;
+    color: #33ff00;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100vw;
+}
+
+* { box-sizing: border-box; }
+
+/* CRT Effect Overlay */
+.crt::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+#terminal {
+    flex-grow: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding-bottom: 20px;
+    text-shadow: 0 0 5px #33ff00;
+}
+
+.input-line {
+    display: flex;
+    margin-top: 10px;
+}
+
+.prompt {
+    color: #33ff00;
+    margin-right: 10px;
+    text-shadow: 0 0 5px #33ff00;
+}
+
+#cmd-input {
+    background: transparent;
+    border: none;
+    color: #33ff00;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    flex-grow: 1;
+    outline: none;
+    text-shadow: 0 0 5px #33ff00;
+}
+
+.glitch {
+    animation: glitch 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes glitch {
+    2%, 64% { transform: translate(2px,0) skew(0deg); }
+    4%, 60% { transform: translate(-2px,0) skew(0deg); }
+    62% { transform: translate(0,0) skew(5deg); }
+}
+
+.glitch-active {
+    animation: glitch 0.1s linear infinite;
+    filter: hue-rotate(90deg) contrast(150%);
+}
+
+.ascii-art {
+    font-size: 14px;
+    line-height: 14px;
+    color: #ff0000;
+    margin-bottom: 20px;
+}
+
+.btn-hack {
+    background: #33ff00;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-hack:hover {
+    background: #fff;
+}
