@@ -1,3 +1,5 @@
+import { rng } from '../utils/SeededRandom.js';
+
 export const worldData = {
 	adjectives: ['Corrompido', 'Congelado', 'Escuro', 'Vibrante', 'Silencioso', 'Inundado', 'Radioativo', 'Antigo'],
 	nouns: ['Mainframe', 'Setor de Dados', 'Corredor de Cabos', 'Laboratório', 'Sala de Backups', 'Túnel de Resfriamento'],
@@ -12,11 +14,11 @@ export class World {
 	}
 
 	rng(array) {
-		return array[Math.floor(Math.random() * array.length)];
+		return array[Math.floor(rng.next() * array.length)];
 	}
 
 	chance(percentage) {
-		return Math.random() * 100 < percentage;
+		return rng.next() * 100 < percentage;
 	}
 
 	generateRoom(x, y) {

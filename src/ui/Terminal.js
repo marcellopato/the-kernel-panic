@@ -10,6 +10,15 @@ export class Terminal {
 	init(onCommand) {
 		this.onCommand = onCommand;
 		this.input.addEventListener('keydown', (e) => {
+			const commands = ['norte', 'sul', 'leste', 'oeste', 'pegar', 'usar', 'inv', 'hackear', 'olhar', 'delegar', 'start', 'ajuda', 'usar patch'];
+			
+			if (e.key === 'Tab') {
+				e.preventDefault();
+				const partial = this.input.value.toLowerCase();
+				const match = commands.find(c => c.startsWith(partial));
+				if (match) this.input.value = match;
+			}
+
 			if (e.key === 'Enter') {
 				const cmd = this.input.value;
 				this.print(`> ${cmd}`);

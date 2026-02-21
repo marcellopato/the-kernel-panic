@@ -13,6 +13,7 @@ body {
     flex-direction: column;
     box-sizing: border-box;
     width: 100vw;
+    transition: box-shadow 0.5s ease;
 }
 
 * { box-sizing: border-box; }
@@ -30,6 +31,34 @@ body {
     z-index: 2;
     background-size: 100% 2px, 3px 100%;
     pointer-events: none;
+}
+
+/* Panic Levels */
+body.panic-low {
+    box-shadow: inset 0 0 50px rgba(255, 255, 0, 0.2);
+}
+body.panic-med {
+    box-shadow: inset 0 0 80px rgba(255, 165, 0, 0.4);
+    animation: pulse-panic 2s infinite;
+}
+body.panic-crit {
+    box-shadow: inset 0 0 150px rgba(255, 0, 0, 0.6);
+    animation: shake-panic 0.2s infinite;
+}
+body.panic-dead {
+    filter: grayscale(100%) brightness(0.5);
+}
+
+@keyframes pulse-panic {
+    0% { box-shadow: inset 0 0 80px rgba(255, 165, 0, 0.4); }
+    50% { box-shadow: inset 0 0 120px rgba(255, 50, 0, 0.5); }
+    100% { box-shadow: inset 0 0 80px rgba(255, 165, 0, 0.4); }
+}
+
+@keyframes shake-panic {
+    0% { transform: translate(1px, 1px); }
+    50% { transform: translate(-1px, -1px); }
+    100% { transform: translate(1px, -1px); }
 }
 
 #terminal {
