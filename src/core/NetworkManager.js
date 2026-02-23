@@ -19,13 +19,20 @@ export class NetworkManager {
         this.peer.on('open', (id) => {
             this.myId = id;
             console.log('Neural Link ID:', id);
+            this.terminal.print(`ID DE LINK: [ ${id} ]`, "code");
+            const link = `${window.location.origin}/?join=${id}`;
+            this.terminal.print(`Link direto: ${link}`, "prompt");
         });
 
         this.peer.on('connection', (conn) => {
             this.conn = conn;
             this.setupConnection();
             this.terminal.print("⚠️ CONEXÃO NEURAL EXTERNA ESTABELECIDA.", "glitch");
-            this.terminal.print(`Operador remoto [${conn.peer}] conectado.`, "prompt");
+            this.terminal.print(`Operador remoto conectado.`, "prompt");
+        });
+
+        this.peer.on('error', (err) => {
+             this.terminal.print("ERRO DE REDE: " + err.type, "glitch");
         });
     }
 
@@ -54,7 +61,14 @@ export class NetworkManager {
             if (this.mode === 'host') {
                 this.broadcast({ type: 'sys_log', msg: 'Sincronização neural iniciada.' });
             } else {
-                this.terminal.print("Conectado ao mainframe central.", "prompt");
+                this.terminal.print("CONECTADO AO MAINFRAME CENTRAL.", "glitch");
+                this.terminal.print("Modo de Operador Remoto Ativado.", "prompt");
+                // Activate UI if available
+                if (this.game.uiManager && this.game.uiManager.showHackerPanel) {
+                    this.game.uiManager.showHackerPanel(this);
+                } else {
+                    this.terminal.print("Comandos disponíveis: scan, boost, panic", "code");
+                }
             }
         });
     }
@@ -68,21 +82,25 @@ export class NetworkManager {
     handleData(data) {
         // Log feed logic
         if (data.type === 'sys_log') {
-            // Show on UI (HUD corner)
-            this.game.uiManager.updateRemoteLog(data.msg);
+            if (this.game.uiManager && this.game.uiManager.updateRemoteLog) {
+                this.game.uiManager.updateRemoteLog(data.msg);
+            } else {
+                this.terminal.print(`LOG REMOTO: ${data.msg}`, "prompt");
+            }
         }
         
         // Host handling commands from Client
+
         if (this.mode === 'host') {
             if (data.type === 'cmd_boost') {
-                this.game.player.ram = Math.min(100, this.game.player.ram + 15);
+                this.game.player.ram = Math.min(this.game.player.maxRam, this.game.player.ram + 15);
                 this.terminal.print("⚡ RAM BOOST RECEBIDO DO OPERADOR.", "glitch");
-                this.game.soundManager.playBeep(880, 0.2);
+                if (this.game.soundManager) this.game.soundManager.playBeep(880, 0.2);
             }
             if (data.type === 'cmd_panic') {
                 this.game.player.panicLevel += 10;
                 this.terminal.print("💀 O OPERADOR CAUSOU UM PICO DE TENSÃO!", "glitch");
-                this.game.crtManager.triggerGlitch(500);
+                if (this.game.crtManager) this.game.crtManager.triggerGlitch(500);
             }
             if (data.type === 'cmd_scan') {
                 const room = this.game.world.generateRoom(this.game.player.x, this.game.player.y);
@@ -94,7 +112,14 @@ export class NetworkManager {
 
         // Client receiving updates
         if (this.mode === 'client') {
-            // Visualize host actions? (Maybe just text log for now)
+            // Client specific logic if needed
+        }
+    }
+
+    sendCommand(cmd) {
+        if (this.mode === 'client') {
+            this.conn.send({ type: `cmd_${cmd}` });
+            this.terminal.print(`Comando enviando: ${cmd}...`, "prompt");
         }
     }
 }

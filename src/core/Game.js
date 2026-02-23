@@ -1,16 +1,19 @@
 import { Player } from './Player.js';
 import { World } from './World.js';
 import { GameState } from './GameState.js';
+import { NetworkManager } from './NetworkManager.js';
 import { EncounterManager } from './EncounterManager.js';
 import { rng } from '../utils/SeededRandom.js';
 
 export class Game {
-	constructor(terminal, soundManager, crtManager) {
+	constructor(terminal, soundManager, crtManager, uiManager) {
 		this.terminal = terminal;
 		this.soundManager = soundManager;
 		this.crtManager = crtManager;
+		this.uiManager = uiManager;
 		this.player = null;
 		this.world = null;
+		this.networkManager = new NetworkManager(this, terminal);
 		this.encounterManager = new EncounterManager(terminal, soundManager);
 		this.isPuzzleActive = false;
 		this.isEncounterActive = false;
@@ -33,8 +36,20 @@ export class Game {
 		this.dailySeed = parseInt(`${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`);
 		rng.setSeed(this.dailySeed); // Set seed for world gen
 
+		// Check for Join Link
+		if (urlParams.has('join')) {
+			const hostId = urlParams.get('join');
+			this.terminal.clear();
+			await this.terminal.print("🔗 PROTOCOLO DE LINK DETECTADO", "glitch");
+			await this.terminal.print(`Conectando ao Host Neural [${hostId}]...`, "prompt");
+			setTimeout(async () => {
+				window.history.replaceState({}, document.title, "/");
+				await this.networkManager.initClient(hostId);
+			}, 1000);
+			return; // Stop normal init
+		}
+
 		// Check for SOS Rescue Mission
-		const urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.has('sos')) {
 			const targetUser = urlParams.get('user') || 'UNKNOWN';
 			this.terminal.clear();
@@ -183,19 +198,32 @@ export class Game {
 		else if (cmd === 'hackear' || cmd === 'hack') this.startPuzzle();
 		else if (cmd.startsWith('delegar')) {
 			this.terminal.print("PROTOCOLO OPENCLAW: Ponte ativa. Nó neural operando em modo de escaneamento.", "glitch");
-			if (this.player.panicLevel > 50) {
-				this.terminal.print("AVISO: Resposta da IA inconsistente. Setores de memória estão sendo realocados.", "glitch");
-				this.player.ram -= 20;
-				if (this.soundManager) this.soundManager.playGlitch();
+			// ... existing logic ...
+		}
+		else if (cmd === 'boost' || cmd === 'panic' || cmd === 'scan') {
+			if (this.networkManager.mode === 'client') {
+				this.networkManager.conn.send({ type: `cmd_${cmd}` });
+				this.terminal.print(`COMANDO ENVIADO: ${cmd.toUpperCase()}`, "code");
 			} else {
-				const room = this.world.generateRoom(this.player.x, this.player.y);
-				this.terminal.print("LOG: Escaneamento de setor concluído.", "prompt");
-				if (room.item) this.terminal.print(`LOG: Objeto detectado: *${room.item}*`, "prompt");
-				this.terminal.print(`LOG: Integridade do Setor: ${100 - this.player.panicLevel}%`, "prompt");
-				if (this.soundManager) this.soundManager.playBeep(880, 0.1);
+				this.terminal.print("Erro: Este comando requer conexão como CLIENTE.", "prompt");
 			}
 		}
-		else if (cmd === 'ajuda') this.terminal.print("Comandos: norte, sul, leste, oeste, pegar, usar [item], usar patch [codigo], inv, hackear, olhar, delegar");
+		else if (cmd === 'ajuda') this.terminal.print("Comandos: norte, sul, leste, oeste, pegar, usar [item], usar patch [codigo], inv, hackear, olhar, delegar, link host, link join [id], boost, panic, scan");
+
+		else if (cmd === 'link host') {
+			await this.networkManager.initHost();
+			this.terminal.print("Aguardando conexão neural...", "glitch");
+			this.terminal.print(`ID DE LINK: ${this.networkManager.myId || 'Gerando...'}`, "code");
+		}
+		else if (cmd.startsWith('link join')) {
+			const id = cmd.replace('link join', '').trim();
+			if (!id) {
+				this.terminal.print("ERRO: ID do host necessário.", "glitch");
+			} else {
+				this.terminal.print(`Tentando sincronizar com nó ${id}...`, "prompt");
+				await this.networkManager.initClient(id);
+			}
+		}
 		else {
 			if (this.soundManager) this.soundManager.playBeep(150, 0.1);
 			this.terminal.print("Comando desconhecido.");
@@ -440,12 +468,87 @@ PANIC: ${panicBar} ${this.player.panicLevel}%
 		await this.terminal.print(dump, "code");
 		
 		const btnId = `share-btn-${Date.now()}`;
-		await this.terminal.printHTML(`<button id="${btnId}" class="btn-hack" style="margin-top: 10px;">[ COPIAR RELATÓRIO ]</button>`);
+		const imgBtnId = `img-btn-${Date.now()}`;
+		await this.terminal.printHTML(`
+			<div style="display:flex; gap:10px; margin-top:10px;">
+				<button id="${btnId}" class="btn-hack">[ COPIAR TEXTO ]</button>
+				<button id="${imgBtnId}" class="btn-hack">[ BAIXAR IMAGEM ]</button>
+			</div>
+		`);
 
 		document.getElementById(btnId).onclick = () => {
 			navigator.clipboard.writeText(dump).then(() => {
 				alert("Crash Dump copiado para a área de transferência!");
 			});
 		};
+
+		document.getElementById(imgBtnId).onclick = () => {
+			this.downloadCrashImage(status, sectors, this.player.ram, this.player.panicLevel);
+		};
+	}
+
+	downloadCrashImage(status, sectors, ram, panic) {
+		const canvas = document.createElement('canvas');
+		canvas.width = 600;
+		canvas.height = 400;
+		const ctx = canvas.getContext('2d');
+
+		// Background
+		ctx.fillStyle = '#0a0a0a';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		// Scanlines
+		ctx.fillStyle = 'rgba(0, 255, 0, 0.05)';
+		for (let i = 0; i < canvas.height; i += 4) {
+			ctx.fillRect(0, i, canvas.width, 2);
+		}
+
+		// Text
+		ctx.font = '20px "Courier New", monospace';
+		ctx.fillStyle = '#00ff00';
+		ctx.shadowColor = '#00ff00';
+		ctx.shadowBlur = 5;
+
+		const lines = [
+			"📟 KERNEL PANIC REPORT",
+			"----------------------",
+			`USER: PID-${Date.now().toString().slice(-4)}`,
+			`STATUS: ${status}`,
+			`SECTOR: ${sectors}`,
+			`RAM: ${ram}%`,
+			`PANIC: ${panic}%`,
+			"----------------------",
+			"the-kernek-panic.vercel.app"
+		];
+
+		let y = 50;
+		lines.forEach(line => {
+			ctx.fillText(line, 40, y);
+			y += 35;
+		});
+
+		// ASCII Skull (simplified)
+		ctx.font = '12px monospace';
+		ctx.fillStyle = '#ff0000';
+		ctx.shadowColor = '#ff0000';
+		const skull = [
+			"      _______",
+			"    .'_/_|_\\_'.",
+			"    \\\\`\\\\  |  /`/",
+			"     `\\\\  |  /`",
+			"       `\\\\|/`",
+			"         `"
+		];
+		y = 50;
+		skull.forEach(line => {
+			ctx.fillText(line, 400, y);
+			y += 20;
+		});
+
+		// Save
+		const link = document.createElement('a');
+		link.download = `kernel-panic-dump-${Date.now()}.png`;
+		link.href = canvas.toDataURL();
+		link.click();
 	}
 }

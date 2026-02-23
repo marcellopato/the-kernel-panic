@@ -3,27 +3,33 @@ export class Terminal {
 		this.container = document.getElementById(terminalId);
 		this.input = document.getElementById(inputId);
 		this.inputArea = document.getElementById(inputAreaId);
+		this.inputForm = document.getElementById('cmd-form');
 		this.soundManager = soundManager;
 		this.onCommand = null;
 	}
 
 	init(onCommand) {
 		this.onCommand = onCommand;
+		
+		this.inputForm.addEventListener('submit', (e) => {
+			e.preventDefault();
+			const cmd = this.input.value.trim();
+			if (cmd) {
+				this.print(`> ${cmd}`, 'prompt', 0);
+				if (this.onCommand) this.onCommand(cmd);
+				this.input.value = '';
+				window.scrollTo(0, document.body.scrollHeight);
+			}
+		});
+
 		this.input.addEventListener('keydown', (e) => {
-			const commands = ['norte', 'sul', 'leste', 'oeste', 'pegar', 'usar', 'inv', 'hackear', 'olhar', 'delegar', 'start', 'ajuda', 'usar patch'];
+			const commands = ['norte', 'sul', 'leste', 'oeste', 'pegar', 'usar', 'inv', 'hackear', 'olhar', 'delegar', 'start', 'ajuda', 'usar patch', 'link host', 'link join'];
 			
 			if (e.key === 'Tab') {
 				e.preventDefault();
 				const partial = this.input.value.toLowerCase();
 				const match = commands.find(c => c.startsWith(partial));
 				if (match) this.input.value = match;
-			}
-
-			if (e.key === 'Enter') {
-				const cmd = this.input.value;
-				this.print(`> ${cmd}`);
-				if (this.onCommand) this.onCommand(cmd);
-				this.input.value = '';
 			}
 		});
 
