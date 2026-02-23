@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE KERNEL PANIC</title>
-  <script type="module" crossorigin src="/assets/index-DnibFpOx.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CT3QRr2L.css">
+  <script type="module" crossorigin src="/assets/index-BTxh-CtX.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BCQVhyiM.css">
 </head>
 <body class="crt">
     <div id="terminal"></div>
     <div class="input-line" id="input-area">
         <span class="prompt">guest@void:~$</span>
-        <input type="text" id="cmd-input" autofocus autocomplete="off">
+        <form id="cmd-form" style="display:flex; flex-grow:1; margin:0;" onsubmit="event.preventDefault();">
+            <input type="text" id="cmd-input" autofocus autocomplete="off">
+        </form>
     </div>
+
 </body>
 </html>
