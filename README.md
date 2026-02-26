@@ -5,18 +5,16 @@
 <p align="center">
 
 [![Live](https://img.shields.io/badge/Status-Live-green?style=for-the-badge)](https://the-kernel-panic.vercel.app)
-[![Vite](https://img.shields.io/badge/Tech-Vite%20%7C%20Node-blue?style=for-the-badge)](https://vitejs.dev)
-[![Theme](https://img.shields.io/badge/Theme-80s%20Cyberpunk-purple?style=for-the-badge)](https://en.wikipedia.org/wiki/Cyberpunk)
-[![License](https://img.shields.io/badge/License-Private-red?style=for-the-badge)](./LICENSE)
-[![Discord](https://img.shields.io/badge/Join-Discord-7289da?style=for-the-badge&logo=discord)](https://discord.gg/clawd)
+[![Vite](https://img.shields.io/badge/Tech-Vite%20%7C%20Node-blue?style=for-the-badge)](.dev)
+[![Themehttps://vitejs](https://img.shields.io/badge/Theme-80s%20Cyberpunk-purple?style=for-the-badge)](https://en.wikipedia.org/wiki/Cyberpunk)
+[![License](https://img.shields.io/badge/License-Private-red?style=for-the-badge)](#-license)
 [![AI Native](https://img.shields.io/badge/🤖-AI--Native-Forked-yellow?style=for-the-badge)](#-the-openclaw-protocol-ocp)
 
 </p>
 
 <div align="center">
 
-**[🎮 PLAY NOW](https://the-kernel-panic.vercel.app)** • 
-**[📊 Leaderboard](https://the-kernel-panic.vercel.app/leaderboard.html)** •
+**[🎮 PLAY NOW](https://the-kernel-panic.vercel.app)** •
 **[📱 Share](https://twitter.com/intent/tweet?text=Play%20Kernel%20Panic!%20https://the-kernel-panic.vercel.app)**
 
 </div>
@@ -69,17 +67,6 @@ window.kernelState = {
 - **🟢 Auxiliary Mode** (Panic < 50%): The AI helps you optimize your escape route
 - **🔴 Corruption Mode** (Panic ≥ 50%): The system orders the AI to sabotage you
 - **👻 S.O.S Mode**: At critical firewalls, ask a real human friend for rescue code via WhatsApp
-
----
-
-## 🏆 Leaderboard
-
-Compete for the best escape! The leaderboard tracks:
-- **Distance** (furthest sector reached)
-- **Panic Level** (lowest at escape)
-- **Daily Challenge** (same seed for everyone)
-
-**[View Leaderboard →](https://the-kernel-panic.vercel.app/leaderboard.html)**
 
 ---
 
