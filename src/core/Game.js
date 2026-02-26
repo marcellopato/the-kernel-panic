@@ -394,8 +394,8 @@ export class Game {
 		document.getElementById('sos-btn').onclick = () => {
 			localStorage.setItem('last_sos_time', Date.now());
 			const processID = `PID-${Date.now().toString().slice(-4)}`;
-			const link = `https://the-kernek-panic.vercel.app/?sos=true&user=${processID}`;
-			const msg = `🚨 SOS! I am stuck in KERNEL PANIC. The system will delete me.\nClique aqui para gerar meu human rescue code: ${link}`;
+			const link = `https://the-kernel-panic.vercel.app/?sos=true&user=${processID}`;
+			const msg = `🚨 SOS! I am stuck in KERNEL PANIC. The system will delete me.\nClick here to generate my rescue code: ${link}`;
 			
 			window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 			this.enableInputAfterSOS();
@@ -464,7 +464,7 @@ SECTOR: ${sectors}
 RAM: [${ramBar}] ${this.player.ram}%
 PANIC: ${panicBar} ${this.player.panicLevel}%
 ----------------------
-🔗 Jogue agora: the-kernek-panic.vercel.app`;
+🔗 Jogue agora: the-kernel-panic.vercel.app`;
 
 		await this.terminal.print("\n--- CRASH DUMP GENERATED ---", "prompt");
 		await this.terminal.print(dump, "code");
@@ -520,7 +520,7 @@ PANIC: ${panicBar} ${this.player.panicLevel}%
 			`RAM: ${ram}%`,
 			`PANIC: ${panic}%`,
 			"----------------------",
-			"the-kernek-panic.vercel.app"
+			"the-kernel-panic.vercel.app"
 		];
 
 		let y = 50;
