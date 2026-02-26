@@ -180,25 +180,25 @@ export class Game {
 		}
 
 		const directions = {
-			'norte': [0, 1], 'n': [0, 1],
-			'sul': [0, -1], 's': [0, -1],
-			'leste': [1, 0], 'l': [1, 0],
-			'oeste': [-1, 0], 'o': [-1, 0]
+			'norte': [0, 1], 'n': [0, 1], 'north': [0, 1],
+			'sul': [0, -1], 's': [0, -1], 'south': [0, -1],
+			'leste': [1, 0], 'l': [1, 0], 'east': [1, 0],
+			'oeste': [-1, 0], 'o': [0, -1], 'west': [-1, 0]
 		};
 
 		if (directions[cmd]) {
 			this.move(...directions[cmd]);
 		}
-		else if (cmd === 'olhar' || cmd === 'ver') this.look();
-		else if (cmd.startsWith('pegar')) this.take();
+		else if (cmd === 'olhar' || cmd === 'ver' || cmd === 'look' || cmd === 'examine') this.look();
+		else if (cmd.startsWith('pegar') || cmd.startsWith('take')) this.take();
 		else if (cmd.startsWith('usar patch')) {
 			const code = cmd.replace('usar patch', '').trim();
 			this.useRescuePatch(code);
 		}
-		else if (cmd.startsWith('usar')) this.useItem(cmd.replace('usar ', ''));
+		else if (cmd.startsWith('usar') || cmd.startsWith('use')) this.useItem(cmd.replace('usar ', ''));
 		else if (cmd === 'inv' || cmd === 'i') this.showInv();
 		else if (cmd === 'hackear' || cmd === 'hack') this.startPuzzle();
-		else if (cmd.startsWith('delegar')) {
+		else if (cmd.startsWith('delegar') || cmd.startsWith('delegate')) {
 			this.terminal.print("OPENCLAW PROTOCOL: Bridge active. Neural node operating in scanning mode.", "glitch");
 			// ... existing logic ...
 		}
@@ -210,14 +210,14 @@ export class Game {
 				this.terminal.print("Error: This command requires CLIENT connection.", "prompt");
 			}
 		}
-		else if (cmd === 'ajuda') this.terminal.print("Comandos: north, south, east, west, pegar, usar [item], usar patch [codigo], inv, hackear, olhar, delegar, link host, link join [id], boost, panic, scan");
+		else if (cmd === 'ajuda' || cmd === 'help') this.terminal.print("Comandos: north, south, east, west, take, usar [item], usar patch [code], use [item], use patch [code] [codigo], inv, hack, look, delegate, delegar, link host, link join [id], boost, panic, scan");
 
 		else if (cmd === 'link host') {
 			await this.networkManager.initHost();
 			this.terminal.print("Waiting for neural connection...", "glitch");
 			this.terminal.print(`ID DE LINK: ${this.networkManager.myId || 'Gerando...'}`, "code");
 		}
-		else if (cmd.startsWith('link join')) {
+		else if (cmd.startsWith('link join') || cmd.startsWith('link join') || cmd.startsWith('join')) {
 			const id = cmd.replace('link join', '').trim();
 			if (!id) {
 				this.terminal.print("ERROR: Host ID required.", "glitch");
