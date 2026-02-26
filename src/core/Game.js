@@ -5,6 +5,8 @@ import { NetworkManager } from './NetworkManager.js';
 import { EncounterManager } from './EncounterManager.js';
 import { rng } from '../utils/SeededRandom.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+
 export class Game {
 	constructor(terminal, soundManager, crtManager, uiManager) {
 		this.terminal = terminal;
