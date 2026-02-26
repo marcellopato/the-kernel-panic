@@ -27,7 +27,7 @@ export class NetworkManager {
         this.peer.on('connection', (conn) => {
             this.conn = conn;
             this.setupConnection();
-            this.terminal.print("⚠️ CONEXÃO NEURAL EXTERNA ESTABELECIDA.", "glitch");
+            this.terminal.print("⚠️ EXTERNAL NEURAL CONNECTION ESTABLISHED.", "glitch");
             this.terminal.print(`Operador remoto conectado.`, "prompt");
         });
 
@@ -46,7 +46,7 @@ export class NetworkManager {
         });
 
         this.peer.on('error', (err) => {
-            this.terminal.print("ERRO DE CONEXÃO: " + err.type, "glitch");
+            this.terminal.print("CONNECTION ERROR: " + err.type, "glitch");
         });
     }
 
@@ -59,7 +59,7 @@ export class NetworkManager {
 
         this.conn.on('open', () => {
             if (this.mode === 'host') {
-                this.broadcast({ type: 'sys_log', msg: 'Sincronização neural iniciada.' });
+                this.broadcast({ type: 'sys_log', msg: 'Neural synchronization started.' });
             } else {
                 this.terminal.print("CONECTADO AO MAINFRAME CENTRAL.", "glitch");
                 this.terminal.print("Modo de Operador Remoto Ativado.", "prompt");
@@ -67,7 +67,7 @@ export class NetworkManager {
                 if (this.game.uiManager && this.game.uiManager.showHackerPanel) {
                     this.game.uiManager.showHackerPanel(this);
                 } else {
-                    this.terminal.print("Comandos disponíveis: scan, boost, panic", "code");
+                    this.terminal.print("Available commands: scan, boost, panic", "code");
                 }
             }
         });
@@ -99,7 +99,7 @@ export class NetworkManager {
             }
             if (data.type === 'cmd_panic') {
                 this.game.player.panicLevel += 10;
-                this.terminal.print("💀 O OPERADOR CAUSOU UM PICO DE TENSÃO!", "glitch");
+                this.terminal.print("💀 THE OPERATOR CAUSED A VOLTAGE SPIKE!", "glitch");
                 if (this.game.crtManager) this.game.crtManager.triggerGlitch(500);
             }
             if (data.type === 'cmd_scan') {

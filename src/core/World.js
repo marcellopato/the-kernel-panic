@@ -2,9 +2,9 @@ import { rng } from '../utils/SeededRandom.js';
 
 export const worldData = {
 	adjectives: ['Corrompido', 'Congelado', 'Escuro', 'Vibrante', 'Silencioso', 'Inundado', 'Radioativo', 'Antigo'],
-	nouns: ['Mainframe', 'Setor de Dados', 'Corredor de Cabos', 'Laboratório', 'Sala de Backups', 'Túnel de Resfriamento'],
-	details: ['cheira a ozônio queimado.', 'tem cabos pulsando como veias.', 'está coberto de poeira cinza.', 'tem telas piscando olhos vermelhos.', 'ouve-se um choro digital distante.'],
-	items: ['Chave de Criptografia', 'Pedaço de RAM', 'Cartucho de Overclock', 'Módulo de Debug', 'Bateria Velha'],
+	nouns: ['Mainframe', 'Data Sector', 'Cable Corridor', 'Laboratory', 'Backup Room', 'Cooling Tunnel'],
+	details: ['smells of burned ozone.', 'has cables pulsing like veins.', 'is covered in gray dust.', 'has screens flashing red eyes.', 'you hear a distant digital cry.'],
+	items: ['Cryptography Key', 'RAM Chunk', 'Overclock Cartridge', 'Debug Module', 'Old Battery'],
 	directions: ['norte', 'sul', 'leste', 'oeste']
 };
 
@@ -28,8 +28,8 @@ export class World {
 		// Special start room
 		if (x === 0 && y === 0) {
 			const room = {
-				desc: "Ponto de Inserção. Uma mensagem pisca na tela: 'OBJETIVO: ENCONTRE O NO DE SEGURANCA PARA ESCAPAR'.",
-				item: "Pedaço de RAM",
+				desc: "Insertion Point. A message flashes on the screen: 'OBJECTIVE: FIND THE SECURITY NODE TO ESCAPE'.",
+				item: "RAM Chunk",
 				isFirewall: false,
 				firewallType: null
 			};
@@ -56,7 +56,7 @@ export class World {
 				'brute': "GUARDIAO DE FORCA BRUTA",
 				'environment': "DADOS CORROMPIDOS"
 			};
-			desc = `ALERTA! Você encontrou um ${types[firewallType]}. Bloqueio total detectado.`;
+			desc = `ALERT! You found a ${types[firewallType]}. Total blockage detected.`;
 		} else {
 			desc = `Um ${this.rng(worldData.nouns)} ${this.rng(worldData.adjectives)}. O local ${this.rng(worldData.details)}`;
 		}

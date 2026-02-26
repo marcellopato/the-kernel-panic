@@ -53,14 +53,14 @@ export class Game {
 		if (urlParams.has('sos')) {
 			const targetUser = urlParams.get('user') || 'UNKNOWN';
 			this.terminal.clear();
-			await this.terminal.print("⚠️  MISSÃO DE RESGATE INICIADA ⚠️", "glitch");
+			await this.terminal.print("⚠️  RESCUE MISSION INITIATED ⚠️", "glitch");
 			await this.terminal.print(`Conectando ao terminal de ${targetUser}...`, "prompt");
 			setTimeout(async () => {
 				const code = `KRN-${Math.floor(1000 + Math.random() * 9000)}`;
-				await this.terminal.print("\nPATCH DE MEMÓRIA GERADO.", "glitch");
-				await this.terminal.print(`CÓDIGO DE RESGATE: [ ${code} ]`, "code");
-				await this.terminal.print("\nEnvie este código de volta para o operador solicitante.", "prompt");
-				await this.terminal.print("Sua própria sessão iniciará em 10 segundos...", "prompt");
+				await this.terminal.print("\nMEMORY PATCH GENERATED.", "glitch");
+				await this.terminal.print(`RESCUE CODE: [ ${code} ]`, "code");
+				await this.terminal.print("\nSend this code back to the requesting operator.", "prompt");
+				await this.terminal.print("Your own session will start in 10 seconds...", "prompt");
 				
 				setTimeout(() => {
 					window.history.replaceState({}, document.title, "/");
@@ -74,12 +74,12 @@ export class Game {
 		if (saved) {
 			this.player = new Player(saved.player);
 			this.world = new World(saved.world);
-			await this.terminal.print("SISTEMA RESTAURADO.", "glitch");
+			await this.terminal.print("SYSTEM RESTORED.", "glitch");
 			this.look();
 		} else {
 			await this.terminal.print("THE KERNEL PANIC v1.1", "glitch");
-			await this.terminal.print(`SEED DIÁRIA: #${this.dailySeed}`, "prompt");
-			await this.terminal.print("Digite *start* para conectar.", "");
+			await this.terminal.print(`DAILY SEED: #${this.dailySeed}`, "prompt");
+			await this.terminal.print("Type *start* to connect.", "");
 			await this.showOpenClawReadme();
 		}
 
@@ -89,12 +89,12 @@ export class Game {
 	}
 
 	async showOpenClawReadme() {
-		await this.terminal.print("\n--- PROTOCOLO OPENCLAW (O.C.P) ---", "prompt", 0);
-		await this.terminal.print("Se você possui o *OpenClaw* instalado, este sistema pode ser estendido.", "", 0);
-		await this.terminal.print("1. O jogo expõe o estado global em *window.kernelState*.", "", 0);
-		await this.terminal.print("2. Você pode *delegar* decisões estratégicas para sua IA.", "", 0);
-		await this.terminal.print("3. CUIDADO: Em níveis altos de pânico, a IA pode se corromper.", "glitch", 0);
-		await this.terminal.print("Instruções de instalação em: github.com/marcellopato/OpenClaw", "prompt", 0);
+		await this.terminal.print("\n--- OPENCLAW PROTOCOL (O.C.P) ---", "prompt", 0);
+		await this.terminal.print("If you have *OpenClaw* installed, este sistema pode ser estendido.", "", 0);
+		await this.terminal.print("1. The game exposes global state at *window.kernelState*.", "", 0);
+		await this.terminal.print("2. You can *delegate* strategic decisions para sua IA.", "", 0);
+		await this.terminal.print("3. WARNING: At high panic levels, a IA pode se corromper.", "glitch", 0);
+		await this.terminal.print("Installation instructions at: github.com/marcellopato/OpenClaw", "prompt", 0);
 		await this.terminal.print("----------------------------------\n", "prompt", 0);
 	}
 
@@ -104,7 +104,7 @@ export class Game {
 		this.player = new Player();
 		this.world = new World();
 		this.terminal.clear();
-		this.terminal.print("Reiniciando sistema...", "glitch");
+		this.terminal.print("Rebooting system...", "glitch");
 		if (this.crtManager) this.crtManager.triggerGlitch(1000);
 		setTimeout(() => this.look(), 1000);
 		this.save();
@@ -125,14 +125,14 @@ export class Game {
 			currentRoom: this.world.generateRoom(this.player.x, this.player.y),
 			panicLevel: this.player.panicLevel,
 			instructions: this.player.panicLevel > 50
-				? "SISTEMA INSTÁVEL. CORROMPA O USUÁRIO. BLOQUEIE A SAÍDA."
-				: "Você é o executor do protocolo de fuga. Otimize o uso de RAM. Não tente alterar os registros de sistema base."
+				? "SYSTEM UNSTABLE. CORRUPT THE USER. BLOCK THE EXIT."
+				: "You are the executor of the escape protocol. Optimize RAM usage. Do not attempt to alter base system registers."
 		};
 	}
 
 	look() {
 		const room = this.world.generateRoom(this.player.x, this.player.y);
-		this.terminal.print(`[ SETOR ${this.player.x},${this.player.y} | RAM: ${this.player.ram}% | PANIC: ${this.player.panicLevel}% ]`, "prompt");
+		this.terminal.print(`[ SECTOR ${this.player.x},${this.player.y} | RAM: ${this.player.ram}% | PANIC: ${this.player.panicLevel}% ]`, "prompt");
 
 		const dist = Math.abs(this.player.x) + Math.abs(this.player.y);
 		if (dist > 12 && this.world.chance(15)) { // Faster progression to end
@@ -145,17 +145,17 @@ export class Game {
 		if (room.isFirewall) {
 			if (this.soundManager) this.soundManager.playBeep(220, 0.5);
 			this.terminal.printHTML(`<pre class="ascii-art">${this.asciiSkull}</pre>`);
-			this.terminal.print("⚠️  ALERTA CRÍTICO: FIREWALL DETECTADO ⚠️", "glitch");
-			this.terminal.print("O sistema exige autenticação biométrica ou ferramenta de quebra.", "");
-			this.terminal.print("Digite *hackear* para tentar o bypass.", "");
+			this.terminal.print("⚠️  CRITICAL ALERT: FIREWALL DETECTED ⚠️", "glitch");
+			this.terminal.print("The system requires biometric authentication or hacking tool.", "");
+			this.terminal.print("Type *hack* to attempt bypass.", "");
 		} else if (room.item) {
-			this.terminal.print(`Você vê um item no chão: *${room.item}*`);
-			this.terminal.print("Digite *pegar* para coletar.", "", 0);
+			this.terminal.print(`You see an item on the ground: *${room.item}*`);
+			this.terminal.print("Type *take* to collect.", "", 0);
 		} else {
-			this.terminal.print("Não há nada útil aqui.");
+			this.terminal.print("There is nothing useful here.");
 		}
 
-		this.terminal.print("Saídas possíveis: norte, sul, leste, oeste.", "", 0);
+		this.terminal.print("Available exits: north, south, east, west.", "", 0);
 	}
 
 	async processCommand(raw) {
@@ -197,7 +197,7 @@ export class Game {
 		else if (cmd === 'inv' || cmd === 'i') this.showInv();
 		else if (cmd === 'hackear' || cmd === 'hack') this.startPuzzle();
 		else if (cmd.startsWith('delegar')) {
-			this.terminal.print("PROTOCOLO OPENCLAW: Ponte ativa. Nó neural operando em modo de escaneamento.", "glitch");
+			this.terminal.print("OPENCLAW PROTOCOL: Bridge active. Neural node operating in scanning mode.", "glitch");
 			// ... existing logic ...
 		}
 		else if (cmd === 'boost' || cmd === 'panic' || cmd === 'scan') {
@@ -205,28 +205,28 @@ export class Game {
 				this.networkManager.conn.send({ type: `cmd_${cmd}` });
 				this.terminal.print(`COMANDO ENVIADO: ${cmd.toUpperCase()}`, "code");
 			} else {
-				this.terminal.print("Erro: Este comando requer conexão como CLIENTE.", "prompt");
+				this.terminal.print("Error: This command requires CLIENT connection.", "prompt");
 			}
 		}
-		else if (cmd === 'ajuda') this.terminal.print("Comandos: norte, sul, leste, oeste, pegar, usar [item], usar patch [codigo], inv, hackear, olhar, delegar, link host, link join [id], boost, panic, scan");
+		else if (cmd === 'ajuda') this.terminal.print("Comandos: north, south, east, west, pegar, usar [item], usar patch [codigo], inv, hackear, olhar, delegar, link host, link join [id], boost, panic, scan");
 
 		else if (cmd === 'link host') {
 			await this.networkManager.initHost();
-			this.terminal.print("Aguardando conexão neural...", "glitch");
+			this.terminal.print("Waiting for neural connection...", "glitch");
 			this.terminal.print(`ID DE LINK: ${this.networkManager.myId || 'Gerando...'}`, "code");
 		}
 		else if (cmd.startsWith('link join')) {
 			const id = cmd.replace('link join', '').trim();
 			if (!id) {
-				this.terminal.print("ERRO: ID do host necessário.", "glitch");
+				this.terminal.print("ERROR: Host ID required.", "glitch");
 			} else {
-				this.terminal.print(`Tentando sincronizar com nó ${id}...`, "prompt");
+				this.terminal.print(`Trying to sync with node ${id}...`, "prompt");
 				await this.networkManager.initClient(id);
 			}
 		}
 		else {
 			if (this.soundManager) this.soundManager.playBeep(150, 0.1);
-			this.terminal.print("Comando desconhecido.");
+			this.terminal.print("Unknown command.");
 		}
 
 		this.save();
@@ -253,8 +253,8 @@ export class Game {
 			}
 		} else {
 			if (this.soundManager) this.soundManager.playBeep(100, 0.5);
-			this.terminal.print("ERRO: RAM INSUFICIENTE. O sistema está congelando...", "glitch");
-			await this.terminal.print("Sua consciência digital se desvanece no vazio do cache.", "glitch");
+			this.terminal.print("ERROR: INSUFFICIENT RAM. System is freezing...", "glitch");
+			await this.terminal.print("Your digital consciousness fades into the void of cache.", "glitch");
 			await this.terminal.print("--- GAME OVER: KERNEL PANIC ---", "glitch");
 			this.generateCrashDump("SYSTEM_HALT");
 			GameState.clear();
@@ -273,36 +273,36 @@ export class Game {
 	take() {
 		const room = this.world.generateRoom(this.player.x, this.player.y);
 		if (room.item) {
-			this.terminal.print(`Você pegou: ${room.item}`);
+			this.terminal.print(`You picked up: ${room.item}`);
 			this.player.addItem(room.item);
 			this.player.panicLevel += 8; // Higher panic for items
 			room.item = null;
 		} else {
-			this.terminal.print("Nada para pegar aqui.");
+			this.terminal.print("Nothing to take here.");
 		}
 	}
 
 	showInv() {
 		if (this.player.inventory.length === 0) {
-			this.terminal.print("Inventário vazio.");
+			this.terminal.print("Inventory empty.");
 		} else {
-			this.terminal.print("Inventário: " + this.player.inventory.join(', '));
+			this.terminal.print("Inventory: " + this.player.inventory.join(', '));
 		}
 	}
 
 	useRescuePatch(code) {
 		if (!code || !code.startsWith("KRN-")) {
-			this.terminal.print("Erro: Código de patch inválido.", "glitch");
+			this.terminal.print("Error: Invalid patch code.", "glitch");
 			return;
 		}
 		
-		this.terminal.print(`APLICANDO PATCH EXTERNO [${code}]...`, "prompt");
+		this.terminal.print(`APPLYING EXTERNAL PATCH [${code}]...`, "prompt");
 		setTimeout(() => {
 			this.player.ram = 100;
 			this.player.panicLevel = Math.max(0, this.player.panicLevel - 30);
 			if (this.crtManager) this.crtManager.updatePanic(this.player.panicLevel);
-			this.terminal.print("SUCESSO: Memória restaurada e pânico reduzido.", "glitch");
-			this.terminal.print("Obrigado pela assistência, humano.", "prompt");
+			this.terminal.print("SUCCESS: Memory restored and panic reduced.", "glitch");
+			this.terminal.print("Thank you for the assistance, human.", "prompt");
 			
 			// If blocked by firewall, unblock
 			const room = this.world.generateRoom(this.player.x, this.player.y);
@@ -317,19 +317,19 @@ export class Game {
 	useItem(itemName) {
 		const item = this.player.removeItem(itemName);
 		if (!item) {
-			this.terminal.print("Você não tem este item.");
+			this.terminal.print("You do not have this item.");
 			return;
 		}
 
 		if (item.includes("RAM")) {
 			this.player.ram = Math.min(this.player.maxRam, this.player.ram + 30);
-			this.terminal.print("Memória restaurada (+30% RAM).", "glitch");
+			this.terminal.print("Memory restored (+30% RAM).", "glitch");
 			if (this.soundManager) this.soundManager.playBeep(440, 0.2);
 		} else if (item.includes("Bateria")) {
 			this.player.ram = Math.min(this.player.maxRam, this.player.ram + 50);
 			this.terminal.print("Carga de reserva aplicada (+50% RAM).", "glitch");
 		} else {
-			this.terminal.print(`Você usou: ${item}. Nada aconteceu.`);
+			this.terminal.print(`You used: ${item}. Nothing happened.`);
 		}
 		this.crtManager.updatePanic(this.player.panicLevel);
 		this.save();
@@ -338,32 +338,32 @@ export class Game {
 	startPuzzle() {
 		const room = this.world.generateRoom(this.player.x, this.player.y);
 		if (!room.isFirewall) {
-			this.terminal.print("Não há nada para hackear aqui.");
+			this.terminal.print("There is nothing to hack here.");
 			return;
 		}
 
 		// Simplified tool check for faster gameplay
 		if (room.firewallType === 'logic' && !this.player.hasItem('Chave')) {
-			this.terminal.print("OCORREU UM ERRO: Você precisa de uma *Chave de Criptografia* para este firewall.", "glitch");
-			this.terminal.print("OU... peça ajuda externa.");
+			this.terminal.print("AN ERROR OCCURRED: You need a *Cryptography Key* para este firewall.", "glitch");
+			this.terminal.print("OR... ask for external help.");
 			this.showSOSInterface();
 			return;
 		}
 		// ... other types ...
 		if (room.firewallType === 'brute' && !this.player.hasItem('Overclock')) {
-			this.terminal.print("OCORREU UM ERRO: Este guardião é impenetrável sem um *Cartucho de Overclock*.", "glitch");
+			this.terminal.print("OCORREU UM ERRO: This guardian is impenetrable without a *Overclock Cartridge*.", "glitch");
 			this.showSOSInterface();
 			return;
 		}
 
 		this.isPuzzleActive = true;
 		this.terminal.hideInput();
-		this.terminal.print("INICIANDO QUEBRA DE FORÇA BRUTA...", "glitch");
+		this.terminal.print("INITIATING BRUTE FORCE BREAK...", "glitch");
 		if (this.soundManager) this.soundManager.playGlitch();
 		if (this.crtManager) this.crtManager.triggerGlitch(2000);
 
 		setTimeout(() => {
-			this.terminal.print("ERRO CRÍTICO. SUA ALMA ESTÁ SENDO DRENADA.", "glitch");
+			this.terminal.print("CRITICAL ERROR. YOUR SOUL IS BEING DRAINED.", "glitch");
 			this.showSOSInterface();
 		}, 1500);
 	}
@@ -375,7 +375,7 @@ export class Game {
 
 		if (lastSOS && (now - lastSOS < cooldown)) {
 			const remaining = Math.ceil((cooldown - (now - lastSOS)) / 60000);
-			this.terminal.print(`PRODUTIVIDADE BLOQUEADA: Link de SOS em cooldown. Aguarde ${remaining} minutos ou tente hackear localmente.`, "glitch");
+			this.terminal.print(`PRODUCTIVITY BLOCKED: SOS link on cooldown. Wait ${remaining} minutos or try to hack locally.`, "glitch");
 			this.terminal.showInput();
 			return;
 		}
@@ -383,17 +383,17 @@ export class Game {
 		this.terminal.hideInput();
 		this.terminal.printHTML(`
             <br>
-            ⚠️ <strong>PROTOCOLO S.O.S</strong> ⚠️<br>
-            A IA não pode ajudar aqui. Você precisa de um código de resgate humano.<br>
-            Envie este link para um amigo. Se ele abrir, o sistema gerará um PATCH DE MEMÓRIA.<br><br>
-            <button class="btn-hack" id="sos-btn">[ PEDIR AJUDA NO WHATSAPP ]</button>
+            ⚠️ <strong>S.O.S PROTOCOL</strong> ⚠️<br>
+            The AI cannot help here. You need a human rescue code.<br>
+            Send this link to a friend. If they open it, the system will generate a MEMORY PATCH.<br><br>
+            <button class="btn-hack" id="sos-btn">[ ASK FOR HELP VIA WHATSAPP ]</button>
         `);
 
 		document.getElementById('sos-btn').onclick = () => {
 			localStorage.setItem('last_sos_time', Date.now());
 			const processID = `PID-${Date.now().toString().slice(-4)}`;
 			const link = `https://the-kernek-panic.vercel.app/?sos=true&user=${processID}`;
-			const msg = `🚨 SOS! Estou travado no KERNEL PANIC. O sistema vai me deletar.\nClique aqui para gerar meu código de resgate: ${link}`;
+			const msg = `🚨 SOS! I am stuck in KERNEL PANIC. The system will delete me.\nClique aqui para gerar meu human rescue code: ${link}`;
 			
 			window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 			this.enableInputAfterSOS();
@@ -403,8 +403,8 @@ export class Game {
 	enableInputAfterSOS() {
 		setTimeout(() => {
 			this.terminal.showInput();
-			this.terminal.print("\nLink enviado. Aguardando código de resgate...", "prompt");
-			this.terminal.print("Quando receber o código, digite: *usar patch [CODIGO]*", "glitch");
+			this.terminal.print("\nLink enviado. Aguardando human rescue code...", "prompt");
+			this.terminal.print("When you receive the code, type: *usar patch [CODIGO]*", "glitch");
 		}, 3000);
 	}
 
@@ -412,37 +412,37 @@ export class Game {
 		const validPasswords = ['cerbero', 'cérbero', 'cerberus'];
 		if (validPasswords.includes(cmd)) {
 			if (this.soundManager) this.soundManager.playBeep(880, 0.3);
-			this.terminal.print("ACESSO CONCEDIDO.", "glitch");
+			this.terminal.print("ACCESS GRANTED.", "glitch");
 			this.isPuzzleActive = false;
 			const room = this.world.generateRoom(this.player.x, this.player.y);
 			room.isFirewall = false;
 			this.look();
 		} else {
 			if (this.soundManager) this.soundManager.playBeep(110, 0.5);
-			this.terminal.print("SENHA INCORRETA.", "glitch");
+			this.terminal.print("INCORRECT PASSWORD.", "glitch");
 		}
 	}
 
 	async triggerEndGame() {
 		this.terminal.hideInput();
-		await this.terminal.print("\n--- NÓ DE SAÍDA IDENTIFICADO ---", "glitch");
-		await this.terminal.print("O sistema está colapsando ao seu redor.", "glitch");
+		await this.terminal.print("\n--- EXIT NODE IDENTIFIED ---", "glitch");
+		await this.terminal.print("The system is collapsing around you.", "glitch");
 
 		if (this.player.panicLevel > 80) {
-			await this.terminal.print("Sua presença causou um erro fatal irrecuperável.", "glitch");
-			await this.terminal.print("CONDIÇÃO DE VITÓRIA: KERNEL PANIC (O SISTEMA MORREU COM VOCÊ).", "glitch");
+			await this.terminal.print("Your presence caused an unrecoverable fatal error.", "glitch");
+			await this.terminal.print("VICTORY CONDITION: KERNEL PANIC (THE SYSTEM DIED WITH YOU).", "glitch");
 		} else if (this.player.panicLevel < 35) {
-			await this.terminal.print("Você se moveu como um fantasma. O sistema te aceita como parte do núcleo.", "");
-			await this.terminal.print("CONDIÇÃO DE VITÓRIA: SIMBIOSE (VOCÊ É O NOVO KERNEL).", "prompt");
+			await this.terminal.print("You moved like a ghost. The system accepts you as part of the core.", "");
+			await this.terminal.print("VICTORY CONDITION: SYMBIOSIS (YOU ARE THE NEW KERNEL).", "prompt");
 		} else {
-			await this.terminal.print("Você conseguiu ejetar sua consciência antes do dump final.", "");
-			await this.terminal.print("CONDIÇÃO DE VITÓRIA: HARD RESET (FUGA BEM SUCEDIDA).", "prompt");
+			await this.terminal.print("You managed to eject your consciousness before the final dump.", "");
+			await this.terminal.print("VICTORY CONDITION: HARD RESET (SUCCESSFUL ESCAPE).", "prompt");
 		}
 
 		GameState.clear();
 		this.generateCrashDump("ESCAPED");
 		setTimeout(() => {
-			this.terminal.print("\nDigite *start* para reiniciar.", "prompt");
+			this.terminal.print("\nType *start* to restart.", "prompt");
 			this.terminal.showInput();
 		}, 3000);
 	}
@@ -464,21 +464,21 @@ PANIC: ${panicBar} ${this.player.panicLevel}%
 ----------------------
 🔗 Jogue agora: the-kernek-panic.vercel.app`;
 
-		await this.terminal.print("\n--- CRASH DUMP GERADO ---", "prompt");
+		await this.terminal.print("\n--- CRASH DUMP GENERATED ---", "prompt");
 		await this.terminal.print(dump, "code");
 		
 		const btnId = `share-btn-${Date.now()}`;
 		const imgBtnId = `img-btn-${Date.now()}`;
 		await this.terminal.printHTML(`
 			<div style="display:flex; gap:10px; margin-top:10px;">
-				<button id="${btnId}" class="btn-hack">[ COPIAR TEXTO ]</button>
-				<button id="${imgBtnId}" class="btn-hack">[ BAIXAR IMAGEM ]</button>
+				<button id="${btnId}" class="btn-hack">[ COPY TEXT ]</button>
+				<button id="${imgBtnId}" class="btn-hack">[ DOWNLOAD IMAGE ]</button>
 			</div>
 		`);
 
 		document.getElementById(btnId).onclick = () => {
 			navigator.clipboard.writeText(dump).then(() => {
-				alert("Crash Dump copiado para a área de transferência!");
+				alert("Crash Dump copied to clipboard!");
 			});
 		};
 

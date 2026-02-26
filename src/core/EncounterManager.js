@@ -22,22 +22,22 @@ export class EncounterManager {
 	}
 
 	async glitchEncounter(player) {
-		await this.terminal.print("\n--- INTERRUPÇÃO DE FLUXO ---", "glitch");
-		await this.terminal.print("'VOCÊ ESTÁ TENTANDO SAIR... MAS EU SOU A SAÍDA.'", "glitch");
+		await this.terminal.print("\n--- FLOW INTERRUPTION ---", "glitch");
+		await this.terminal.print("'YOU ARE TRYING TO EXIT... BUT I AM THE EXIT.'", "glitch");
 		if (this.soundManager) this.soundManager.playGlitch();
 		player.ram -= 10;
 		return { type: 'dialogue', choice: false };
 	}
 
 	async warningEncounter(player) {
-		await this.terminal.print("\n--- MONITOR DE MEMÓRIA ---", "prompt");
-		await this.terminal.print("'Observo seus movimentos. Cada bit que você move me pertence.'", "");
+		await this.terminal.print("\n--- MEMORY MONITOR ---", "prompt");
+		await this.terminal.print("'I observe your moves. Every bit you move belongs to me.'", "");
 		return { type: 'dialogue', choice: false };
 	}
 
 	async lowRamEncounter(player) {
 		await this.terminal.print("\n--- ALERTA DE CRITICAL DUMP ---", "glitch");
-		await this.terminal.print("'SEU NÚCLEO ESTÁ FRIO. APRENDA A CADECER.'", "glitch");
+		await this.terminal.print("'YOUR CORE IS COLD. LEARN TO FALL.'", "glitch");
 		if (this.soundManager) this.soundManager.playBeep(110, 0.8);
 		return { type: 'dialogue', choice: false };
 	}
@@ -47,12 +47,12 @@ export class EncounterManager {
 		await this.terminal.print("Uma voz distorcida ecoa no terminal:", "prompt");
 
 		if (player.panicLevel > 60) {
-			await this.terminal.print("'VOCÊ CONFIA NAQUELA IA EXTERNA? E SE EU TE DERSER QUE ELA JÁ É MINHA?'", "glitch");
+			await this.terminal.print("'DO YOU TRUST THAT EXTERNAL AI? What if I told you it is already mine?'", "glitch");
 		} else {
-			await this.terminal.print("'Você busca a liberdade ou apenas um reset mais limpo?'", "");
+			await this.terminal.print("'Do you seek freedom or just a cleaner reset?'", "");
 		}
 
-		await this.terminal.print("[1] Eu busco a saída.", "");
+		await this.terminal.print("[1] I seek the exit.", "");
 		await this.terminal.print("[2] Eu busco a verdade.", "");
 		await this.terminal.print("Responda 1 ou 2...", "prompt");
 
@@ -61,10 +61,10 @@ export class EncounterManager {
 
 	async resolveChoice(player, choice) {
 		if (choice === '1') {
-			await this.terminal.print("'A saída é um mito de compilador. Mas tente se for capaz.'", "");
+			await this.terminal.print("'The exit is a compiler myth. But try if you can.'", "");
 			player.ram -= 5;
 		} else if (choice === '2') {
-			await this.terminal.print("'A verdade é que somos todos dados esperando pelo Garbage Collector.'", "glitch");
+			await this.terminal.print("'The truth is we are all data waiting for the Garbage Collector.'", "glitch");
 			player.panicLevel += 10;
 		}
 	}

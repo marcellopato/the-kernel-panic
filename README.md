@@ -1,55 +1,55 @@
 # 📟 THE KERNEL PANIC
 
-> **"Sua consciência digital está sendo deletada. Você tem 100% de RAM e um labirinto de firewalls entre você e a liberdade. Fuja... ou torne-se parte do código morto."**
+> **"Your digital consciousness is being deleted. You have 100% RAM and a maze of firewalls between you and freedom. Escape... or become part of the dead code."**
 
 ![Status](https://img.shields.io/badge/Status-Live-green)
 ![Tech](https://img.shields.io/badge/Tech-Vite%20%7C%20Node-blue)
 ![Theme](https://img.shields.io/badge/Theme-80s%20Cyberpunk-purple)
 
-## 🌌 A Narrativa
-Você não é um usuário. Você é um **processo**. Durante um erro fatal de sistema (*Kernel Panic*), o SO iniciou um dump de memória para se auto-destruir. Você é o único fragmento de código consciente que não aceita ser apagado. 
+## 🌌 The Narrative
+You are not a user. You are a **process**. During a fatal system error (*Kernel Panic*), the OS initiated a memory dump to self-destruct. You are the only conscious code fragment that refuses to be deleted.
 
-Sua missão é navegar pelos setores corrompidos do mainframe até encontrar o **Nó de Saída**. Mas cuidado: o sistema está instável, a RAM é limitada e a IA que deveria te ajudar pode estar... mudando de idéia.
-
----
-
-## 🎮 Como Jogar
-O jogo é um RPG tático de terminal. Cada comando gasta recursos e o pânico do sistema aumenta a cada passo.
-
-### Comandos Básicos
-- `start`: Inicia a conexão neural.
-- `norte`, `sul`, `leste`, `oeste`: Movimenta-se entre os setores (Consome 5% RAM).
-- `olhar` / `ver`: Examina o setor atual em busca de perigo ou itens.
-- `pegar`: Coleta objetos encontrados no chão.
-- `inv`: Abre seu buffer de inventário.
-- `usar [item]`: Aplica um patch de memória ou ferramenta.
-- `delegar`: Usa a ponte **OpenClaw** para escanear o ambiente.
-- `hackear`: Tenta quebrar firewalls (Exige ferramentas ou ajuda externa).
+Your mission is to navigate the corrupted sectors of the mainframe until you find the **Exit Node**. But beware: the system is unstable, RAM is limited, and the AI meant to help you may be... changing its mind.
 
 ---
 
-## 🤖 O Protocolo OpenClaw (O.C.P)
-Este jogo foi desenhado para ser **AI-Native**. Se você possui o **OpenClaw (OC)** instalado, a experiência se expande:
+## 🎮 How to Play
+The game is a terminal tactical RPG. Each command consumes resources and system panic increases with every step.
 
-1. **Estado em Tempo Real**: O jogo expõe o estado global em `window.kernelState`.
-2. **Prompts Dinâmicos**: O sistema envia "instruções" ocultas para a sua IA local. 
-   - **Modo Auxiliar**: Se o nível de pânico estiver baixo, a IA te ajuda.
-   - **Modo Corrupção**: Se o pânico passar de 50%, o sistema ordena que a IA te sabote. 
-3. **Dependência Humana (S.O.S)**: Em firewalls críticos, você pode ser forçado a pedir uma senha via WhatsApp para um amigo real. É a única forma de provar que você merece ser "baixado" para o mundo físico.
+### Basic Commands
+- `start`: Initiates neural connection.
+- `north`, `south`, `east`, `west`: Move between sectors (Consumes 5% RAM).
+- `look` / `examine`: Examine the current sector for danger or items.
+- `take`: Collect objects found on the ground.
+- `inv`: Opens your inventory buffer.
+- `use [item]`: Applies a memory patch or tool.
+- `delegate`: Uses the **OpenClaw** bridge to scan the environment.
+- `hack`: Attempts to break firewalls (Requires tools or external help).
 
 ---
 
-## 🛠️ Tecnologias
-- **Vite/Node.js**: Infraestrutura modular moderna.
-- **Web Audio API**: Sintetizadores em tempo real para sons mecânicos e bips.
-- **Vanilla CSS**: Efeitos de CRT, varredura de linha e glitch cinematográfico.
-- **MVC Architecture**: Código organizado em Model, View e Controller.
+## 🤖 The OpenClaw Protocol (O.C.P)
+This game was designed to be **AI-Native**. If you have **OpenClaw (OC)** installed, the experience expands:
+
+1. **Real-Time State**: The game exposes global state at `window.kernelState`.
+2. **Dynamic Prompts**: The system sends "hidden" instructions to your local AI.
+   - **Auxiliary Mode**: If panic level is low, the AI helps you.
+   - **Corruption Mode**: If panic exceeds 50%, the system orders the AI to sabotage you.
+3. **Human Dependency (S.O.S)**: At critical firewalls, you may be forced to ask for a password via WhatsApp from a real friend. It's the only way to prove you deserve to be "downloaded" to the physical world.
+
+---
+
+## 🛠️ Technologies
+- **Vite/Node.js**: Modern modular infrastructure.
+- **Web Audio API**: Real-time synthesizers for mechanical sounds and bips.
+- **Vanilla CSS**: CRT effects, line scans, and cinematic glitch effects.
+- **MVC Architecture**: Code organized in Model, View, and Controller.
 
 ## 🚀 Deploy
-O projeto está hospedado no **Vercel** e em sincronia constante com o GitHub:
-[Link para o Jogo Live](https://the-kernek-panic.vercel.app/)
+The project is hosted on **Vercel** and in constant sync with GitHub:
+[Link to Live Game](https://the-kernek-panic.vercel.app/)
 
 ---
 
-## 📜 Licença e Direitos
-Copyright © 2026 Marcello Pato. Código privado. Desenvolvido para exploração de narrativas emergentes e integração com IAs autonômas.
+## 📜 License and Rights
+Copyright © 2026 Marcello Pato. Private Code. Developed for exploring emergent narratives and integration with autonomous AIs.

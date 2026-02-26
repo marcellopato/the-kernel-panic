@@ -44,7 +44,7 @@ class UIManager {
         };
         document.getElementById('btn-panic').onclick = () => {
             networkManager.broadcast({ type: 'cmd_panic' });
-            this.updateRemoteLog('Injetando ruído no sistema...');
+            this.updateRemoteLog('Injecting noise into the system...');
         };
     }
 }
