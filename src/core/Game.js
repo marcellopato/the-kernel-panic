@@ -3,6 +3,7 @@ import { World } from './World.js';
 import { GameState } from './GameState.js';
 import { NetworkManager } from './NetworkManager.js';
 import { EncounterManager } from './EncounterManager.js';
+import { leaderboard } from './LeaderboardManager.js';
 import { rng } from '../utils/SeededRandom.js';
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -210,7 +211,8 @@ export class Game {
 				this.terminal.print("Error: This command requires CLIENT connection.", "prompt");
 			}
 		}
-		else if (cmd === 'ajuda' || cmd === 'help') this.terminal.print("Comandos: north, south, east, west, take, usar [item], usar patch [code], use [item], use patch [code] [codigo], inv, hack, look, delegate, delegar, link host, link join [id], boost, panic, scan");
+		else if (cmd === 'leaderboard' || cmd === 'scores') this.showLeaderboard()
+		else if (cmd === 'ajuda' || cmd === 'help') this.terminal.print("Comandos: north, south, east, west, take, usar [item], usar patch [code], use [item], use patch [code] [codigo], inv, hack, look, delegate, delegar, link host, link join [id], boost, panic, scan, leaderboard, scores");
 
 		else if (cmd === 'link host') {
 			await this.networkManager.initHost();
@@ -290,6 +292,27 @@ export class Game {
 		} else {
 			this.terminal.print("Inventory: " + this.player.inventory.join(', '));
 		}
+	}
+
+	showLeaderboard() {
+		const all = leaderboard.getLeaderboard().slice(0, 10);
+		const daily = leaderboard.getDailyLeaderboard().slice(0, 10);
+		const stats = leaderboard.getStats();
+
+		this.terminal.print("\n🏆 LEADERBOARD", "prompt");
+		this.terminal.print("─".repeat(30), "prompt");
+		this.terminal.print(`Total Plays: ${stats.totalPlays} | Today's Players: ${stats.dailyPlayers}`, "prompt");
+		this.terminal.print("", "prompt");
+		this.terminal.print("📅 DAILY CHALLENGE", "glitch");
+		daily.forEach((entry, i) => {
+			this.terminal.print(`${i + 1}. ${entry.name} - Score: ${entry.score} (Panic: ${entry.panic}%)`, "code");
+		});
+		this.terminal.print("", "prompt");
+		this.terminal.print("🌐 ALL-TIME BEST", "prompt");
+		all.forEach((entry, i) => {
+			this.terminal.print(`${i + 1}. ${entry.name} - Score: ${entry.score} (Panic: ${entry.panic}%)`, "code");
+		});
+		this.terminal.print("\nUse same daily seed for fair competition!", "prompt");
 	}
 
 	useRescuePatch(code) {
@@ -441,10 +464,19 @@ export class Game {
 			await this.terminal.print("VICTORY CONDITION: HARD RESET (SUCCESSFUL ESCAPE).", "prompt");
 		}
 
+		// Save to leaderboard
+		const distance = Math.abs(this.player.x) + Math.abs(this.player.y);
+		const score = distance * 100 - (this.player.panicLevel * 10);
+		const ranks = leaderboard.addScore(null, score, this.player.panicLevel, this.dailySeed);
+		
+		await this.terminal.print(`\n📊 SCORE: ${score} | Distance: ${distance} sectors`, "prompt");
+		await this.terminal.print(`🏆 All-Time Rank: #${ranks.rank} | Daily Rank: #${ranks.dailyRank}`, "prompt");
+
 		GameState.clear();
 		this.generateCrashDump("ESCAPED");
 		setTimeout(() => {
 			this.terminal.print("\nType *start* to restart.", "prompt");
+			this.terminal.print("Type *leaderboard* to view top players.", "prompt");
 			this.terminal.showInput();
 		}, 3000);
 	}
