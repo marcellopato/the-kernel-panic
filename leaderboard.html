@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE KERNEL PANIC - Leaderboard</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 2rem;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #00ff00;
+        }
+        th {
+            background: rgba(0, 255, 0, 0.2);
+        }
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .section-title {
+            margin-top: 2rem;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 0.5rem;
+        }
+        .play-btn {
+            display: block;
+            width: 200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #00ff00;
+            color: #0a0a0a;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .play-btn:hover {
+            background: #00cc00;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .back-link a {
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 LEADERBOARD</h1>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="totalPlays">-</div>
+                <div class="stat-label">Total Plays</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="todayPlayers">-</div>
+                <div class="stat-label">Today's Players</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="topScore">-</div>
+                <div class="stat-label">Top Score</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">📅 Daily Challenge</h2>
+        <table id="dailyTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                    <th>Panic</th>
+                </tr>
+            </thead>
+            <tbody id="dailyBody"></tbody>
+        </table>
+
+        <h2 class="section-title">🌐 All-Time Best</h2>
+        <table id="allTimeTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                    <th>Panic</th>
+                </tr>
+            </thead>
+            <tbody id="allTimeBody"></tbody>
+        </table>
+
+        <a href="/" class="play-btn">🎮 PLAY NOW</a>
+        
+        <div class="back-link">
+            <a href="/">← Back to Game</a>
+        </div>
+    </div>
+
+    <script type="module">
+        const STORAGE_KEY = 'kernel_panic_leaderboard';
+        const DAILY_KEY = 'kernel_panic_daily';
+
+        function getLeaderboard() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function getDailyLeaderboard() {
+            const today = new Date();
+            const seed = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+            const data = localStorage.getItem(`${DAILY_KEY}_${seed}`);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function renderTable(bodyId, data) {
+            const tbody = document.getElementById(bodyId);
+            tbody.innerHTML = data.map((entry, i) => `
+                <tr class="rank-${i + 1}">
+                    <td>${i + 1}</td>
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                    <td>${entry.panic}%</td>
+                </tr>
+            `).join('');
+        }
+
+        function init() {
+            const all = getLeaderboard().slice(0, 20);
+            const daily = getDailyLeaderboard().slice(0, 20);
+
+            document.getElementById('totalPlays').textContent = all.length;
+            document.getElementById('todayPlayers').textContent = daily.length;
+            document.getElementById('topScore').textContent = all[0]?.score || 0;
+
+            renderTable('dailyBody', daily);
+            renderTable('allTimeBody', all);
+        }
+
+        init();
+    </script>
+</body>
+</html>
