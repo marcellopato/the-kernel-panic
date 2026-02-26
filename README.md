@@ -16,7 +16,7 @@
 <div align="center">
 
 **[🎮 PLAY NOW](https://the-kernel-panic.vercel.app)** • 
-**[📊 Leaderboard](https://the-kernel-panic.vercel.app/leaderboard)** •
+**[📊 Leaderboard](https://the-kernel-panic.vercel.app/leaderboard.html)** •
 **[📱 Share](https://twitter.com/intent/tweet?text=Play%20Kernel%20Panic!%20https://the-kernel-panic.vercel.app)**
 
 </div>
@@ -79,7 +79,7 @@ Compete for the best escape! The leaderboard tracks:
 - **Panic Level** (lowest at escape)
 - **Daily Challenge** (same seed for everyone)
 
-**[View Leaderboard →](https://the-kernel-panic.vercel.app/leaderboard)**
+**[View Leaderboard →](https://the-kernel-panic.vercel.app/leaderboard.html)**
 
 ---
 
