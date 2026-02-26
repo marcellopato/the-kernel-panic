@@ -47,7 +47,7 @@ This game was designed to be **AI-Native**. If you have **OpenClaw (OC)** instal
 
 ## 🚀 Deploy
 The project is hosted on **Vercel** and in constant sync with GitHub:
-[Link to Live Game](https://the-kernek-panic.vercel.app/)
+[Link to Live Game](https://the-kernel-panic.vercel.app/)
 
 ---
 
