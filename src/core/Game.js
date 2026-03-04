@@ -442,4 +442,6 @@ export class Game {
 			await this.terminal.print("You managed to eject your consciousness before the final dump.", "");
 			await this.terminal.print("VICTORY CONDITION: HARD RESET (SUCCESSFUL ESCAPE).", "prompt");
 		}
+	}
+}
 
